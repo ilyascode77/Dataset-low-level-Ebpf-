@@ -1,0 +1,26 @@
+# OS
+Thumbs.db
+Desktop.ini
+
+# Logs and generated data
+*.log
+*.jsonl
+*.csv
+dataset/raw/
+dataset/generated/
+
+# Secrets and local configuration
+.env
+*.key
+*.pem
+kubeconfig*
+*.kubeconfig
+
+# Python
+__pycache__/
+.venv/
+venv/
+
+# Editor
+.vscode/
+.idea/
