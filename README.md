@@ -51,4 +51,4 @@ Tetragon eBPF events
 
 ## Current Status
 
-Repository initialized. The next step is to install K3s inside the Ubuntu VM and apply the base Kubernetes namespaces.
+K3s is installed and running inside the Ubuntu VM. The benign e-commerce application is deployed in `benign-lab`. Tetragon is installed in the `security` namespace and captures runtime events from the `attack-lab` namespace, including process execution, service account token reads, TCP connections, and ransomware-like file activity.

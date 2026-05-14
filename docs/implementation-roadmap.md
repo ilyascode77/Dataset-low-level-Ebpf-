@@ -35,6 +35,14 @@ Expected proof:
 - Tetragon JSON events.
 - Events linked to pod, namespace, binary, and arguments.
 
+Status:
+
+- Completed initial Tetragon deployment.
+- Captured attack-lab process execution events.
+- Captured service account token reads.
+- Captured wget external TCP connection.
+- Captured ransomware-like writes under `/victims`.
+
 ## Milestone 4 - Attack Lab
 
 - Deploy controlled suspicious workloads in `attack-lab`.
