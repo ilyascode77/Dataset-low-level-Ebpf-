@@ -1,0 +1,40 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: filebench-workload
+  namespace: benign-lab
+  labels:
+    app: filebench-workload
+    pfe.io/workload: benign-io
+spec:
+  template:
+    metadata:
+      labels:
+        app: filebench-workload
+        pfe.io/workload: benign-io
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: filebench
+          image: ubuntu:24.04
+          command:
+            - /bin/bash
+            - -c
+            - |
+              set -euo pipefail
+              apt-get update
+              DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends filebench ca-certificates
+              mkdir -p /data/filebench
+              filebench -f /etc/filebench/webserver.f
+          volumeMounts:
+            - name: filebench-data
+              mountPath: /data/filebench
+            - name: filebench-config
+              mountPath: /etc/filebench
+      volumes:
+        - name: filebench-data
+          persistentVolumeClaim:
+            claimName: pvc-filebench
+        - name: filebench-config
+          configMap:
+            name: filebench-workload-config

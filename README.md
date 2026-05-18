@@ -59,3 +59,23 @@ VM3 - Kali attacker
 ## Current Status
 
 K3s is installed and running inside VM1. The benign e-commerce application is deployed in `benign-lab`. Tetragon is installed in the `security` namespace and captures runtime events from the `attack-lab` namespace, including process execution, service account token reads, TCP connections, and ransomware-like file activity. The next target is to extend the lab with PV/PVC, I/O workloads, Falco, VM2 SOC/SOAR, and VM3 Kali.
+
+## VM1 Storage and Benign I/O Layout
+
+The repository now defines the first storage layer for VM1:
+
+```text
+k8s/storage/
+  hostpath-pvs.yaml
+  benign-pvcs.yaml
+  attack-pvcs.yaml
+
+k8s/benign-workloads/io/
+  seed-ecommerce-data-job.yaml
+  fio-configmap.yaml
+  fio-job.yaml
+  filebench-configmap.yaml
+  filebench-job.yaml
+```
+
+This layer creates realistic benign I/O activity and safe shared volumes for later ransomware-like simulations.

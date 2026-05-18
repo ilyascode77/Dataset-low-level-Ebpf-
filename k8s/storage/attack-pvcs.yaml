@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-ecommerce-attack
+  namespace: attack-lab
+  labels:
+    pfe.io/purpose: ecommerce
+    pfe.io/zone: attack
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: pfe-hostpath
+  volumeName: pv-ecommerce-attack
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-shared-attack
+  namespace: attack-lab
+  labels:
+    pfe.io/purpose: shared
+    pfe.io/zone: attack
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: pfe-hostpath
+  volumeName: pv-shared-attack
+  resources:
+    requests:
+      storage: 1Gi

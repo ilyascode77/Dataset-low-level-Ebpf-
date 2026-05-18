@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fio-workload-config
+  namespace: benign-lab
+  labels:
+    app: fio-workload
+    pfe.io/workload: benign-io
+data:
+  fio-job.ini: |
+    [global]
+    directory=/data/fio
+    ioengine=sync
+    direct=0
+    time_based
+    runtime=45
+    size=128m
+    bs=4k
+    group_reporting
+
+    [benign-randread]
+    rw=randread
+    numjobs=1
+
+    [benign-randwrite]
+    rw=randwrite
+    numjobs=1

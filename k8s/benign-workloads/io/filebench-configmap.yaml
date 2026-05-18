@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebench-workload-config
+  namespace: benign-lab
+  labels:
+    app: filebench-workload
+    pfe.io/workload: benign-io
+data:
+  webserver.f: |
+    set $dir=/data/filebench
+    set $nfiles=1000
+    set $meandirwidth=20
+    set $filesize=16k
+    set $nthreads=4
+
+    define fileset name=webfiles,path=$dir,entries=$nfiles,dirwidth=$meandirwidth,size=$filesize,prealloc=80
+
+    define process name=webserver,instances=1 {
+      thread name=worker,memsize=10m,instances=$nthreads {
+        flowop openfile name=open-file,filesetname=webfiles
+        flowop readwholefile name=read-file,filesetname=webfiles
+        flowop closefile name=close-file
+        flowop appendfilerand name=append-file,filesetname=webfiles,iosize=1k
+      }
+    }
+
+    run 45

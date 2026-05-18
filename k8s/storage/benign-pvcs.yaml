@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-ecommerce
+  namespace: benign-lab
+  labels:
+    pfe.io/purpose: ecommerce
+    pfe.io/zone: benign
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: pfe-hostpath
+  volumeName: pv-ecommerce-benign
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-fio
+  namespace: benign-lab
+  labels:
+    pfe.io/purpose: fio
+    pfe.io/zone: benign
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: pfe-hostpath
+  volumeName: pv-fio
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-filebench
+  namespace: benign-lab
+  labels:
+    pfe.io/purpose: filebench
+    pfe.io/zone: benign
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: pfe-hostpath
+  volumeName: pv-filebench
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-shared-benign
+  namespace: benign-lab
+  labels:
+    pfe.io/purpose: shared
+    pfe.io/zone: benign
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: pfe-hostpath
+  volumeName: pv-shared-benign
+  resources:
+    requests:
+      storage: 1Gi

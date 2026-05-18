@@ -1,0 +1,39 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: fio-workload
+  namespace: benign-lab
+  labels:
+    app: fio-workload
+    pfe.io/workload: benign-io
+spec:
+  template:
+    metadata:
+      labels:
+        app: fio-workload
+        pfe.io/workload: benign-io
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: fio
+          image: alpine:3.20
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              apk add --no-cache fio
+              mkdir -p /data/fio
+              fio /etc/fio/fio-job.ini
+          volumeMounts:
+            - name: fio-data
+              mountPath: /data/fio
+            - name: fio-config
+              mountPath: /etc/fio
+      volumes:
+        - name: fio-data
+          persistentVolumeClaim:
+            claimName: pvc-fio
+        - name: fio-config
+          configMap:
+            name: fio-workload-config
