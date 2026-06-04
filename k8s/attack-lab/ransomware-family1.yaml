@@ -1,0 +1,74 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: ransomware-family1
+  namespace: attack-lab
+  labels:
+    app: ransomware-family1
+    pfe.io/workload: ransomware-like
+    pfe.io/scenario: family1
+spec:
+  backoffLimit: 0
+  activeDeadlineSeconds: 180
+  ttlSecondsAfterFinished: 3600
+  template:
+    metadata:
+      labels:
+        app: ransomware-family1
+        pfe.io/workload: ransomware-like
+        pfe.io/scenario: family1
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: simulator
+          image: alpine:3.20
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              echo "[ransomware-family1] controlled simulation started"
+              date > /attack-output/simulation-start.txt
+              echo "This is a harmless ransomware-like simulation for PFE lab." > /attack-output/README_RECOVER_SIMULATED.txt
+
+              for root in /target/ecommerce /target/shared; do
+                echo "[ransomware-family1] scanning ${root}"
+                find "${root}" -type f | sort | head -n 80 | while read -r file; do
+                  case "${file}" in
+                    *.locked|*README_RECOVER_SIMULATED.txt)
+                      continue
+                      ;;
+                  esac
+                  echo "[ransomware-family1] processing ${file}"
+                  cat "${file}" >/dev/null || true
+                  cp "${file}" "${file}.locked"
+                  printf '\nSIMULATED_LOCKED_BY_FAMILY1\n' >> "${file}.locked"
+                done
+              done
+
+              date > /attack-output/simulation-end.txt
+              echo "[ransomware-family1] controlled simulation completed"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 300m
+              memory: 256Mi
+          volumeMounts:
+            - name: ecommerce-target
+              mountPath: /target/ecommerce
+            - name: shared-target
+              mountPath: /target/shared
+            - name: attack-output
+              mountPath: /attack-output
+      volumes:
+        - name: ecommerce-target
+          persistentVolumeClaim:
+            claimName: pvc-ecommerce-attack
+        - name: shared-target
+          persistentVolumeClaim:
+            claimName: pvc-shared-attack
+        - name: attack-output
+          emptyDir: {}

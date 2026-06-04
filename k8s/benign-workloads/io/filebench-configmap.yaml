@@ -9,15 +9,15 @@ metadata:
 data:
   webserver.f: |
     set $dir=/data/filebench
-    set $nfiles=1000
+    set $nfiles=300
     set $meandirwidth=20
-    set $filesize=16k
-    set $nthreads=4
+    set $filesize=8k
+    set $nthreads=2
 
-    define fileset name=webfiles,path=$dir,entries=$nfiles,dirwidth=$meandirwidth,size=$filesize,prealloc=80
+    define fileset name=webfiles,path=$dir,entries=$nfiles,dirwidth=$meandirwidth,size=$filesize,prealloc=60
 
     define process name=webserver,instances=1 {
-      thread name=worker,memsize=10m,instances=$nthreads {
+      thread name=worker,memsize=5m,instances=$nthreads {
         flowop openfile name=open-file,filesetname=webfiles
         flowop readwholefile name=read-file,filesetname=webfiles
         flowop closefile name=close-file
@@ -25,4 +25,4 @@ data:
       }
     }
 
-    run 45
+    run 30

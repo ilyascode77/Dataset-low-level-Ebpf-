@@ -79,3 +79,29 @@ k8s/benign-workloads/io/
 ```
 
 This layer creates realistic benign I/O activity and safe shared volumes for later ransomware-like simulations.
+
+## Dataset Extraction
+
+The repository includes a first parser for Tetragon JSONL events:
+
+```text
+scripts/tetragon-jsonl-to-csv.py
+```
+
+It extracts low-level process, file, network, pod, and container attributes into CSV format and adds dataset labels such as `benign` or `malicious`.
+
+## VM2 Wazuh SOC Integration
+
+VM2 is the Wazuh SOC/SIEM node. VM1 sends both Tetragon/eBPF and Falco JSONL events through a Wazuh agent so the dashboard can display cloud-native runtime detections.
+
+```text
+VM1 Kubernetes -> Tetragon/Falco JSONL -> Wazuh agent -> VM2 Wazuh manager/dashboard
+```
+
+The integration guide and reusable rules are available in:
+
+```text
+docs/step-06-vm2-wazuh-integration.md
+wazuh/agent/vm1-ossec-localfile-snippet.xml
+wazuh/manager/pfe-cloud-native-rules.xml
+```

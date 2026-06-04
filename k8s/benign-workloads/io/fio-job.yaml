@@ -7,6 +7,9 @@ metadata:
     app: fio-workload
     pfe.io/workload: benign-io
 spec:
+  backoffLimit: 1
+  activeDeadlineSeconds: 180
+  ttlSecondsAfterFinished: 3600
   template:
     metadata:
       labels:
@@ -17,6 +20,7 @@ spec:
       containers:
         - name: fio
           image: alpine:3.20
+          imagePullPolicy: IfNotPresent
           command:
             - /bin/sh
             - -c
@@ -25,6 +29,13 @@ spec:
               apk add --no-cache fio
               mkdir -p /data/fio
               fio /etc/fio/fio-job.ini
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
           volumeMounts:
             - name: fio-data
               mountPath: /data/fio

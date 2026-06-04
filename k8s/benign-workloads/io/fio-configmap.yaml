@@ -13,10 +13,12 @@ data:
     ioengine=sync
     direct=0
     time_based
-    runtime=45
-    size=128m
+    runtime=30
+    size=64m
     bs=4k
     group_reporting
+    randrepeat=1
+    stonewall
 
     [benign-randread]
     rw=randread

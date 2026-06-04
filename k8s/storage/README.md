@@ -16,3 +16,23 @@ This directory defines the hostPath PV/PVC layer for VM1.
 ## Why Multiple PVs For The Same HostPath
 
 A Kubernetes PV binds to one PVC. For a single-node research lab, we use multiple explicit PVs pointing to the same safe hostPath directory to model shared data across namespaces.
+
+## Storage Design Decision
+
+The current implementation intentionally keeps:
+
+```text
+pv-shared-benign -> /srv/pfe-lab/shared
+pv-shared-attack -> /srv/pfe-lab/shared
+```
+
+This models a critical shared data surface: a benign workload and a ransomware-like workload can touch the same files, which is useful for demonstrating impact and producing clear eBPF traces.
+
+For a stricter isolation model, use separate subdirectories:
+
+```text
+/srv/pfe-lab/shared/benign
+/srv/pfe-lab/shared/attack
+```
+
+That alternative is cleaner operationally, but it is less useful for simulating the shared-volume risk.

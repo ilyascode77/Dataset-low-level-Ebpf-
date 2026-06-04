@@ -1,0 +1,25 @@
+<!--
+  Copy these blocks into VM1 Wazuh agent configuration:
+
+    sudo nano /var/ossec/etc/ossec.conf
+    sudo systemctl restart wazuh-agent
+
+  The files are newline-delimited JSON produced on VM1 by the lab bridge
+  commands documented in docs/step-06-vm2-wazuh-integration.md.
+-->
+
+<localfile>
+  <log_format>json</log_format>
+  <location>/var/log/pfe-lab/tetragon.jsonl</location>
+  <label key="@source">tetragon</label>
+  <label key="lab.vm">vm1-kubernetes</label>
+  <label key="lab.project">pfe-ebpf-soc-xdr</label>
+</localfile>
+
+<localfile>
+  <log_format>json</log_format>
+  <location>/var/log/pfe-lab/falco.jsonl</location>
+  <label key="@source">falco</label>
+  <label key="lab.vm">vm1-kubernetes</label>
+  <label key="lab.project">pfe-ebpf-soc-xdr</label>
+</localfile>

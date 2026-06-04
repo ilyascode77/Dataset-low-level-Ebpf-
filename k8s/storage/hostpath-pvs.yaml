@@ -5,6 +5,7 @@ metadata:
   labels:
     pfe.io/purpose: ecommerce
     pfe.io/zone: benign
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
     storage: 2Gi
@@ -14,7 +15,7 @@ spec:
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/ecommerce
-    type: DirectoryOrCreate
+    type: Directory
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -23,6 +24,7 @@ metadata:
   labels:
     pfe.io/purpose: ecommerce
     pfe.io/zone: attack
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
     storage: 2Gi
@@ -32,7 +34,7 @@ spec:
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/ecommerce
-    type: DirectoryOrCreate
+    type: Directory
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -41,16 +43,17 @@ metadata:
   labels:
     pfe.io/purpose: fio
     pfe.io/zone: benign
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
-    storage: 2Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/fio
-    type: DirectoryOrCreate
+    type: Directory
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -59,16 +62,17 @@ metadata:
   labels:
     pfe.io/purpose: filebench
     pfe.io/zone: benign
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
-    storage: 2Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/filebench
-    type: DirectoryOrCreate
+    type: Directory
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -77,6 +81,7 @@ metadata:
   labels:
     pfe.io/purpose: shared
     pfe.io/zone: benign
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
     storage: 1Gi
@@ -86,7 +91,7 @@ spec:
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/shared
-    type: DirectoryOrCreate
+    type: Directory
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -95,6 +100,7 @@ metadata:
   labels:
     pfe.io/purpose: shared
     pfe.io/zone: attack
+    pfe.io/storage: hostpath-static
 spec:
   capacity:
     storage: 1Gi
@@ -104,4 +110,4 @@ spec:
   storageClassName: pfe-hostpath
   hostPath:
     path: /srv/pfe-lab/shared
-    type: DirectoryOrCreate
+    type: Directory

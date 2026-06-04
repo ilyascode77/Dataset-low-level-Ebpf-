@@ -30,7 +30,7 @@ spec:
   volumeName: pv-fio
   resources:
     requests:
-      storage: 2Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -47,7 +47,7 @@ spec:
   volumeName: pv-filebench
   resources:
     requests:
-      storage: 2Gi
+      storage: 1Gi
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

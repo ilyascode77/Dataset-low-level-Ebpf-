@@ -1,0 +1,79 @@
+<!--
+  Copy this file to VM2 Wazuh manager:
+
+    sudo cp wazuh/manager/pfe-cloud-native-rules.xml /var/ossec/etc/rules/
+    sudo chown wazuh:wazuh /var/ossec/etc/rules/pfe-cloud-native-rules.xml
+    sudo systemctl restart wazuh-manager
+
+  These rules rely on Wazuh JSON decoding and dynamic fields.
+-->
+
+<group name="pfe,cloud-native,ebpf,kubernetes,">
+
+  <rule id="110000" level="3">
+    <location>/var/log/pfe-lab/tetragon.jsonl</location>
+    <description>PFE Tetragon event received from VM1 Kubernetes lab</description>
+    <group>tetragon,ebpf,</group>
+  </rule>
+
+  <rule id="110001" level="3">
+    <location>/var/log/pfe-lab/falco.jsonl</location>
+    <description>PFE Falco alert received from VM1 Kubernetes lab</description>
+    <group>falco,kubernetes,</group>
+  </rule>
+
+  <rule id="110010" level="8">
+    <if_sid>110000</if_sid>
+    <field name="process_exec.process.binary">/bin/sh|/bin/bash|/usr/bin/sh|/usr/bin/bash|/bin/ash</field>
+    <description>Tetragon detected shell execution inside Kubernetes workload</description>
+    <mitre>
+      <id>T1059</id>
+    </mitre>
+    <group>tetragon,process,container,execution,</group>
+  </rule>
+
+  <rule id="110011" level="10">
+    <if_sid>110000</if_sid>
+    <field name="process_kprobe.args.path">/var/run/secrets/kubernetes.io/serviceaccount|/run/secrets/kubernetes.io/serviceaccount</field>
+    <description>Tetragon detected Kubernetes service account token access</description>
+    <mitre>
+      <id>T1552</id>
+    </mitre>
+    <group>tetragon,kubernetes,credential-access,</group>
+  </rule>
+
+  <rule id="110012" level="11">
+    <if_sid>110000</if_sid>
+    <field name="process_kprobe.policy_name">pfe-ransomware-like-file-activity</field>
+    <description>Tetragon detected ransomware-like file activity on monitored victim paths</description>
+    <mitre>
+      <id>T1486</id>
+    </mitre>
+    <group>tetragon,ransomware,file-activity,dataset-malicious,</group>
+  </rule>
+
+  <rule id="110013" level="9">
+    <if_sid>110000</if_sid>
+    <field name="process_kprobe.policy_name">pfe-network-observability</field>
+    <description>Tetragon detected network activity from Kubernetes workload</description>
+    <mitre>
+      <id>T1041</id>
+    </mitre>
+    <group>tetragon,network,container,</group>
+  </rule>
+
+  <rule id="110020" level="8">
+    <if_sid>110001</if_sid>
+    <field name="rule">.*</field>
+    <description>Falco Kubernetes runtime security alert: $(rule)</description>
+    <group>falco,kubernetes,runtime-security,</group>
+  </rule>
+
+  <rule id="110021" level="10">
+    <if_sid>110001</if_sid>
+    <field name="priority">Critical|Emergency|Alert</field>
+    <description>High severity Falco alert in Kubernetes lab: $(rule)</description>
+    <group>falco,kubernetes,high-severity,</group>
+  </rule>
+
+</group>
